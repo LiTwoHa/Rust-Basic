@@ -14,11 +14,11 @@
 // Execute `rustlings hint hashmaps3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 use std::collections::HashMap;
 
 // A structure to store the goal details of a team.
+#[derive(Debug,Default)]
 struct Team {
     goals_scored: u8,
     goals_conceded: u8,
@@ -35,10 +35,38 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         let team_2_name = v[1].to_string();
         let team_2_score: u8 = v[3].parse().unwrap();
         // TODO: Populate the scores table with details extracted from the
-        // current line. Keep in mind that goals scored by team_1
+        // current line. Keep in mind that goals scored by team_1报错
         // will be the number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+
+        // let team1 = Team{
+        //     goals_scored : team_1_score,
+        //     goals_conceded : team_2_score
+        // };
+        // let team2 = Team{
+        //     goals_scored : team_2_score,
+        //     goals_conceded : team_1_score
+        // };
+        // scores.entry(team_1_name).or_insert(team1);
+        //
+        // scores.entry(team_2_name).or_insert(team2);
+
+        // 更新或插入队伍1的数据
+        scores.entry(team_1_name.clone())
+            .or_insert_with(Team::default)
+            .goals_scored += team_1_score;
+        scores.entry(team_1_name)
+            .or_insert_with(Team::default)
+            .goals_conceded += team_2_score;
+
+        // 更新或插入队伍2的数据
+        scores.entry(team_2_name.clone())
+            .or_insert_with(Team::default)
+            .goals_scored += team_2_score;
+        scores.entry(team_2_name)
+            .or_insert_with(Team::default)
+            .goals_conceded += team_1_score;
     }
     scores
 }
